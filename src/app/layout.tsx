@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from '@/components/SessionProvider'
 import { cn } from "@/lib/utils";
+import AuthProvider from "@/components/AuthProvider";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans", });
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,7 +24,7 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <SessionProvider>{children}</SessionProvider>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

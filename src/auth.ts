@@ -1,42 +1,50 @@
-import NextAuth, { NextAuthConfig, User } from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import { db } from "./db/db"
+import NextAuth, { CredentialsSignin, DefaultSession } from "next-auth";
+import CredentialProvider from "next-auth/providers/credentials";
+import { db } from "@/db/db";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { compare } from "bcryptjs";
 
-export const authOptions: NextAuthConfig = {
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+      username: string;
+      isAdmin: boolean;
+    } & DefaultSession["user"];
+  }
+}
+export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db) as any,
   session: { strategy: "jwt" },
-  pages: {
-    signIn: '/auth/signin',
-  },
+
   providers: [
-    CredentialsProvider({
+    CredentialProvider({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {
+      authorize: async (credentials) => {
         if (!credentials?.email || !credentials?.password) {
-          return null
+          throw new CredentialsSignin("Enter Correct Email and Password");
         }
 
-        const email = credentials.email as string
-        const password = credentials.password as string
+        const email = credentials.email as string | undefined;
+        const password = credentials.password as string | undefined;
 
         const user = await db.user.findUnique({
-          where: { email }
-        })
+          where: { email },
+        });
 
         if (!user || !user.password) {
-          return null
+          throw new CredentialsSignin("Enter corrct Email and Password");
         }
+        if (!email || !password) throw new Error("no email, passoword");
 
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+        const isPasswordValid = await compare(password, user.password);
 
         if (!isPasswordValid) {
-          return null
+          throw new CredentialsSignin("Wrong Password");
         }
 
         return {
@@ -44,35 +52,26 @@ export const authOptions: NextAuthConfig = {
           email: user.email,
           username: user.username,
           isAdmin: user.isAdmin,
-        }
-      }
-    })
+        };
+      },
+    }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.email = user.email
-        token.username = user.username
-        token.isAdmin = user.isAdmin
+        token.id = user.id;
+        token.username = user.username;
+        token.isAdmin = user.isAdmin;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id || ''
-        session.user.email = token.email || ''
-        session.user.username = (token.username as string) || ''
-        session.user.isAdmin = (token.isAdmin as boolean) || false
+      if (session.user) {
+        session.user.id = token.id as string;
+        session.user.username = token.username as string;
+        session.user.isAdmin = token.isAdmin as boolean;
       }
-      return session
-    }
-  }
-}
-
-export const {
-  handlers: { GET, POST },
-  auth,
-  signIn,
-  signOut
-} = NextAuth(authOptions)
+      return session;
+    },
+  },
+});
