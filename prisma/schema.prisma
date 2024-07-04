@@ -69,9 +69,11 @@ model VerificationToken {
 
 model Question {
   id                Int        @id @default(autoincrement())
+  title             String     
   text              String
   difficulty        String // 'EASY', 'MEDIUM', 'HARD'
   subject           String
+  status            String     @default("UNATTEMPTED")
   explanation       String
   type              String // 'MULTIPLE_CHOICE_SINGLE', 'MULTIPLE_CHOICE_MULTIPLE', 'FILL_IN_THE_BLANK'
   correctPercentage Float      @default(0)

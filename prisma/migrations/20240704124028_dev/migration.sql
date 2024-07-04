@@ -51,6 +51,7 @@ CREATE TABLE "VerificationToken" (
 -- CreateTable
 CREATE TABLE "Question" (
     "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
     "text" TEXT NOT NULL,
     "difficulty" TEXT NOT NULL,
     "subject" TEXT NOT NULL,

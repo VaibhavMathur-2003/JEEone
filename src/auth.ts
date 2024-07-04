@@ -16,7 +16,9 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db) as any,
   session: { strategy: "jwt" },
-
+  pages: {
+    signIn: '/signin',
+  },
   providers: [
     CredentialProvider({
       name: "Credentials",
