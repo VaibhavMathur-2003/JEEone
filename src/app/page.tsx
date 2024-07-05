@@ -3,61 +3,7 @@ import Link from "next/link";
 export default function Component() {
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <header className="px-4 lg:px-6 h-14 flex items-center justify-between bg-blue-200 sticky top-0">
-        <Link
-          href="/"
-          className="flex items-center justify-center"
-          prefetch={false}
-        >
-          <span className="font-bold italic">JEEnius</span>
-        </Link>
-        <nav className="flex gap-4 sm:gap-10">
-          <Link
-            href="/problems"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Problems
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Contests
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Learn
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-medium hover:underline underline-offset-4"
-            prefetch={false}
-          >
-            Premium
-          </Link>
-        </nav>
-        <div className="flex flex-col gap-8 min-[400px]:flex-row">
-          <Link
-            href="/signin"
-            prefetch={false}
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/signup"
-            prefetch={false}
-            className="text-sm font-medium hover:underline underline-offset-4"
-          >
-            Sign Up
-          </Link>
-        </div>
-      </header>
+      
       <main className="flex-1">
         <section className="w-full py-12 md:py-24 lg:py-12">
           <div className="container px-4 md:px-6">

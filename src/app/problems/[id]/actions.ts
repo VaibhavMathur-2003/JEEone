@@ -16,7 +16,6 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
     const user = await db.user.findUnique({
       where: { id: userId },
     });
-    console.log(userId)
 
     let correctness=0;
 
