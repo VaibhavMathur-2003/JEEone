@@ -87,7 +87,7 @@ export default async function RootLayout({
               </>
             ) : (
               <Link
-              href="/profile"
+              href={`/profile/${session.user.id}`}
               prefetch={false}
               >
               <Avatar>

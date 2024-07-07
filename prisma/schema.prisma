@@ -8,94 +8,52 @@ generator client {
 }
 
 model User {
-  id              String     @id @default(cuid())
-  username        String     @unique
-  email           String     @unique
+  id              String           @id @default(cuid())
+  username        String           @unique
+  email           String           @unique
   emailVerified   DateTime?
-  accounts        Account[]
-  sessions        Session[]
   password        String
-  questionsSolved Int        @default(0)
-  isAdmin         Boolean    @default(false)
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
-  solutions       Solution[]
+  isAdmin         Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   attempts        Attempt[]
+  questionStatus  QuestionStatus[]
+  examAttempts    ExamAttempt[]    // Added this line
 
   @@index([username])
   @@index([email])
 }
 
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String?
-  access_token      String?
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String?
-  session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model VerificationToken {
-  identifier String
-  token      String
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
 model Question {
-  id                Int        @id @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   title             String     
   text              String
   difficulty        String // 'EASY', 'MEDIUM', 'HARD'
   subject           String
-  status            String     @default("UNATTEMPTED")
   explanation       String
   type              String // 'MULTIPLE_CHOICE_SINGLE', 'MULTIPLE_CHOICE_MULTIPLE', 'FILL_IN_THE_BLANK'
-  correctPercentage Float      @default(0)
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
-  solutions         Solution[]
+  correctPercentage Float               @default(0)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
   attempts          Attempt[]
   options           Option[]
+  questionStatus    QuestionStatus[]
+  examPaperQuestions ExamPaperQuestion[] // Added this line
+  examAnswers       ExamAnswer[]         // Added this line
 
   @@index([difficulty])
   @@index([subject])
 }
 
-model Solution {
+model QuestionStatus {
   id         String   @id @default(cuid())
-  content    String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   question   Question @relation(fields: [questionId], references: [id])
   questionId Int
+  status     String   @default("UNATTEMPTED") // 'UNATTEMPTED', 'ATTEMPTED', 'PARTIALLY_SOLVED', 'SOLVED'
+
+  @@unique([userId, questionId])
 }
 
 model Attempt {
@@ -127,4 +85,47 @@ model AttemptOption {
   optionId  Int
 
   @@unique([attemptId, optionId])
+}
+
+model ExamPaper {
+  id          String              @id @default(cuid())
+  title       String
+  description String?
+  questions   ExamPaperQuestion[]
+  attempts    ExamAttempt[]
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+}
+
+model ExamPaperQuestion {
+  id          String    @id @default(cuid())
+  examPaper   ExamPaper @relation(fields: [examPaperId], references: [id])
+  examPaperId String
+  question    Question  @relation(fields: [questionId], references: [id])
+  questionId  Int
+  order       Int
+
+  @@unique([examPaperId, questionId])
+}
+
+model ExamAttempt {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  examPaper   ExamPaper   @relation(fields: [examPaperId], references: [id])
+  examPaperId String
+  score       Float
+  startedAt   DateTime    @default(now())
+  completedAt DateTime?
+  answers     ExamAnswer[]
+}
+
+model ExamAnswer {
+  id            String      @id @default(cuid())
+  examAttempt   ExamAttempt @relation(fields: [examAttemptId], references: [id])
+  examAttemptId String
+  question      Question    @relation(fields: [questionId], references: [id])
+  questionId    Int
+  answer        String      // Store the answer as a string (can be parsed later)
+  correctness   Float
 }

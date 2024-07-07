@@ -1,19 +1,23 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Question, Option } from '@prisma/client';
+import React, { useState, useEffect } from 'react';
+import { Question, Option, QuestionStatus } from '@prisma/client';
 import { submitAnswer } from './actions';
 
 interface Props {
-  question: Question & { options: Option[] };
+  question: Question & { options: Option[], questionStatus?: QuestionStatus[] };
   userId?: string;
 }
 
 const AnswerForm: React.FC<Props> = ({ question, userId }) => {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [textAnswer, setTextAnswer] = useState('');
-  const [status, setStatus] = useState(question.status);
+  const [status, setStatus] = useState<string | undefined>(question.questionStatus?.[0]?.status || 'UNATTEMPTED');
   const [feedback, setFeedback] = useState<string | null>(null);
+
+  useEffect(() => {
+    setStatus(question.questionStatus?.[0]?.status || 'UNATTEMPTED');
+  }, [question.questionStatus]);
 
   const handleOptionChange = (optionId: number) => {
     if (question.type === 'MULTIPLE_CHOICE_SINGLE') {
@@ -36,11 +40,10 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
     const answer = question.type === 'FILL_IN_THE_BLANK' ? textAnswer : selectedOptions;
     const result = await submitAnswer(question.id, userId, answer);
     if (result.success) {
-      if(result?.correctness && result?.newStatus){
+      if(result?.correctness !== undefined && result?.newStatus){
         setFeedback(`Your answer was ${(result.correctness * 100).toFixed(2)}% correct.`);
-        setStatus(result?.newStatus);
+        setStatus(result.newStatus);
       }
-      
     } else {
       setFeedback(`Error: ${result.error}`);
     }
@@ -77,6 +80,7 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
       )}
       <button type="submit">Submit Answer</button>
       {feedback && <p>{feedback}</p>}
+      {status && <p>Question Status: {status}</p>}
     </form>
   );
 };

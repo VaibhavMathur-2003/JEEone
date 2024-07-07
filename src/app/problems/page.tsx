@@ -1,7 +1,14 @@
+
+
+
 import Link from "next/link";
 import { db } from "@/db/db";
+import { auth } from "@/auth";
 
 export default async function QuestionListPage() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   const questions = await db.question.findMany({
     select: {
       id: true,
@@ -9,11 +16,18 @@ export default async function QuestionListPage() {
       difficulty: true,
       subject: true,
       type: true,
-      status: true,
+      questionStatus: {
+        where: {
+          userId: userId
+        },
+        select: {
+          status: true
+        }
+      }
     },
   });
 
-  function getStatusIcon(status: string) {
+  function getStatusIcon(status: string | undefined) {
     switch (status) {
       case "PARTIALLY_SOLVED":
         return (
@@ -116,6 +130,7 @@ export default async function QuestionListPage() {
         return null;
     }
   }
+  // ... (getTypeIcon function remains unchanged)
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -124,8 +139,8 @@ export default async function QuestionListPage() {
           <li key={question.id} className="py-1">
             <Link href={`/problems/${question.id}`}>
               <div className="block hover:bg-gray-50 rounded-lg p-1 transition duration-300">
-                <div className="flex items-center justify-between  text-sm text-gray-600">
-                  {getStatusIcon(question.status)}
+                <div className="flex items-center justify-between text-sm text-gray-600">
+                  {getStatusIcon(question.questionStatus[0]?.status)}
 
                   <div className="text-sm text-gray-900">{question.title}</div>
                   <div
@@ -153,5 +168,3 @@ export default async function QuestionListPage() {
     </div>
   );
 }
-
-

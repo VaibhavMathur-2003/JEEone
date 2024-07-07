@@ -6,7 +6,12 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
   try {
     const question = await db.question.findUnique({
       where: { id: questionId },
-      include: { options: true },
+      include: { 
+        options: true,
+        questionStatus: {
+          where: { userId: userId }
+        }
+      },
     });
 
     if (!question) {
@@ -17,7 +22,11 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
       where: { id: userId },
     });
 
-    let correctness=0;
+    if (!user) {
+      return { success: false, error: 'User not found' };
+    }
+
+    let correctness = 0;
 
     if (question.type === 'FILL_IN_THE_BLANK') {
       const correctAnswer = question.options[0]?.text;
@@ -29,13 +38,15 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
       correctness = correctSelections.length / correctOptions.length;
     }
 
+    const currentStatus = question.questionStatus[0]?.status || 'UNATTEMPTED';
     let newStatus;
+
     if (correctness === 1) {
       newStatus = 'SOLVED';
     } else if (correctness > 0) {
-      newStatus = 'PARTIALLY_SOLVED';
+      newStatus = currentStatus === 'SOLVED' ? 'SOLVED' : 'PARTIALLY_SOLVED';
     } else {
-      newStatus = 'ATTEMPTED';
+      newStatus = currentStatus;
     }
 
     const attempt = await db.attempt.create({
@@ -52,18 +63,25 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
       },
     });
 
-    // Update user's questionsSolved count
-    await db.$transaction([
-      db.user.update({
-        where: { id: userId },
-        data: { questionsSolved: { increment: 1 } },
-      }),
-      db.question.update({
-        where: { id: questionId },
-        data: { status: newStatus },
-      }),
-    ]);
-    
+    // Update or create QuestionStatus
+    await db.questionStatus.upsert({
+      where: {
+        userId_questionId: {
+          userId,
+          questionId,
+        },
+      },
+      update: {
+        status: newStatus,
+      },
+      create: {
+        userId,
+        questionId,
+        status: newStatus,
+      },
+    });
+
+   
 
     return { success: true, correctness, attemptId: attempt.id, newStatus };
   } catch (error) {
