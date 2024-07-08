@@ -18,7 +18,7 @@ model User {
   updatedAt       DateTime         @updatedAt
   attempts        Attempt[]
   questionStatus  QuestionStatus[]
-  examAttempts    ExamAttempt[]    // Added this line
+  examAttempts    ExamAttempt[]
 
   @@index([username])
   @@index([email])
@@ -38,8 +38,6 @@ model Question {
   attempts          Attempt[]
   options           Option[]
   questionStatus    QuestionStatus[]
-  examPaperQuestions ExamPaperQuestion[] // Added this line
-  examAnswers       ExamAnswer[]         // Added this line
 
   @@index([difficulty])
   @@index([subject])
@@ -91,6 +89,8 @@ model ExamPaper {
   id          String              @id @default(cuid())
   title       String
   description String?
+  totalMarks  Float               @default(0) // Added default value
+  duration    Int                 @default(60) // Added default value (60 minutes)
   questions   ExamPaperQuestion[]
   attempts    ExamAttempt[]
   createdAt   DateTime            @default(now())
@@ -98,14 +98,43 @@ model ExamPaper {
 }
 
 model ExamPaperQuestion {
-  id          String    @id @default(cuid())
-  examPaper   ExamPaper @relation(fields: [examPaperId], references: [id])
-  examPaperId String
-  question    Question  @relation(fields: [questionId], references: [id])
-  questionId  Int
-  order       Int
+  id            String                    @id @default(cuid())
+  title         String                    @default("Untitled Question")
+  text          String                    @default("")
+  subject       String                    @default("General")
+  type          String                    @default("MULTIPLE_CHOICE_SINGLE")
+  positiveMarks Float                     @default(1)
+  negativeMarks Float                     @default(0)
+  examPaper     ExamPaper                 @relation(fields: [examPaperId], references: [id])
+  examPaperId   String
+  order         Int
+  examAnswers   ExamAnswer[]
+  options       ExamPaperQuestionOption[]
 
-  @@unique([examPaperId, questionId])
+  @@unique([examPaperId, order])
+}
+
+model ExamAnswer {
+  id                  String             @id @default(cuid())
+  examAttempt         ExamAttempt        @relation(fields: [examAttemptId], references: [id])
+  examAttemptId       String
+  examPaperQuestion   ExamPaperQuestion? @relation(fields: [examPaperQuestionId], references: [id])
+  examPaperQuestionId String?
+  questionId          Int?               // Keep this temporarily
+  answer              String
+  correctness         Float
+
+  @@index([examPaperQuestionId])
+}
+
+model ExamPaperQuestionOption {
+  id                  String            @id @default(cuid())
+  text                String
+  isCorrect           Boolean
+  examPaperQuestion   ExamPaperQuestion @relation(fields: [examPaperQuestionId], references: [id])
+  examPaperQuestionId String
+
+  @@index([examPaperQuestionId])
 }
 
 model ExamAttempt {
@@ -118,14 +147,4 @@ model ExamAttempt {
   startedAt   DateTime    @default(now())
   completedAt DateTime?
   answers     ExamAnswer[]
-}
-
-model ExamAnswer {
-  id            String      @id @default(cuid())
-  examAttempt   ExamAttempt @relation(fields: [examAttemptId], references: [id])
-  examAttemptId String
-  question      Question    @relation(fields: [questionId], references: [id])
-  questionId    Int
-  answer        String      // Store the answer as a string (can be parsed later)
-  correctness   Float
 }
