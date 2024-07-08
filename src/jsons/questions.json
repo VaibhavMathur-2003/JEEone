@@ -1,0 +1,68 @@
+[
+    {
+      "title": "Basic Math Question",
+      "text": "What is 2 + 2?",
+      "subject": "Mathematics",
+      "type": "MULTIPLE_CHOICE_SINGLE",
+      "positiveMarks": 1,
+      "negativeMarks": 0,
+      "options": [
+        {
+          "text": "3",
+          "isCorrect": false
+        },
+        {
+          "text": "4",
+          "isCorrect": true
+        },
+        {
+          "text": "5",
+          "isCorrect": false
+        },
+        {
+          "text": "6",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "title": "Science Question",
+      "text": "Which of the following are planets in our solar system? (Select all that apply)",
+      "subject": "Astronomy",
+      "type": "MULTIPLE_CHOICE_MULTIPLE",
+      "positiveMarks": 2,
+      "negativeMarks": 0.5,
+      "options": [
+        {
+          "text": "Earth",
+          "isCorrect": true
+        },
+        {
+          "text": "Sun",
+          "isCorrect": false
+        },
+        {
+          "text": "Mars",
+          "isCorrect": true
+        },
+        {
+          "text": "Moon",
+          "isCorrect": false
+        }
+      ]
+    },
+    {
+      "title": "English Grammar",
+      "text": "Complete the sentence: The quick brown fox _____ over the lazy dog.",
+      "subject": "English",
+      "type": "FILL_IN_THE_BLANK",
+      "positiveMarks": 1,
+      "negativeMarks": 0,
+      "options": [
+        {
+          "text": "jumps",
+          "isCorrect": true
+        }
+      ]
+    }
+  ]

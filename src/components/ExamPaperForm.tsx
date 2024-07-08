@@ -17,6 +17,29 @@ export default function ExamPaperForm({ addExamPaper }: ExamPaperFormProps) {
   });
   const [message, setMessage] = useState<string>('');
 
+  const importQuestionsFromJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const json = JSON.parse(event.target?.result as string);
+          if (Array.isArray(json)) {
+            setExamPaper(prevState => ({
+              ...prevState,
+              questions: json as ExamPaperQuestion[]
+            }));
+          } else {
+            setMessage('Invalid JSON format. Expected an array of questions.');
+          }
+        } catch (error) {
+          setMessage('Error parsing JSON file.');
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
   const addQuestion = () => {
     setExamPaper({
       ...examPaper,
@@ -69,6 +92,17 @@ export default function ExamPaperForm({ addExamPaper }: ExamPaperFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
+      <div>
+      <label htmlFor="jsonFile" className="block">Import Questions from JSON:</label>
+      <input
+        type="file"
+        id="jsonFile"
+        accept=".json"
+        onChange={importQuestionsFromJSON}
+        className="w-full border p-2"
+      />
+    </div>
+
       <div>
         <label htmlFor="title" className="block">Title:</label>
         <input

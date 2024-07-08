@@ -60,11 +60,11 @@ export default async function RootLayout({
               Learn
             </Link>
             <Link
-              href="#"
+              href="/exam"
               className="text-sm font-medium hover:underline underline-offset-4"
               prefetch={false}
             >
-              Premium
+              Exam
             </Link>
           </nav>
           <div className="flex flex-col gap-8 min-[400px]:flex-row">
