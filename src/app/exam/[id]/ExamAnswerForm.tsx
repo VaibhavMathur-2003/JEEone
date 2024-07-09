@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ExamPaperQuestion, ExamPaperQuestionOption } from '@prisma/client';
 
 interface Props {
@@ -11,6 +11,12 @@ interface Props {
 const ExamAnswerForm: React.FC<Props> = ({ examPaperQuestion, onAnswerChange }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [textAnswer, setTextAnswer] = useState('');
+
+  useEffect(() => {
+    // Reset state when question changes
+    setSelectedOptions([]);
+    setTextAnswer('');
+  }, [examPaperQuestion.id]);
 
   const handleOptionChange = (optionId: string) => {
     let newSelectedOptions: string[];
@@ -26,8 +32,9 @@ const ExamAnswerForm: React.FC<Props> = ({ examPaperQuestion, onAnswerChange }) 
   };
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTextAnswer(e.target.value);
-    onAnswerChange(examPaperQuestion.id, e.target.value);
+    const newTextAnswer = e.target.value;
+    setTextAnswer(newTextAnswer);
+    onAnswerChange(examPaperQuestion.id, newTextAnswer);
   };
 
   return (

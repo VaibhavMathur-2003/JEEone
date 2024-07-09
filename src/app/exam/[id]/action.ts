@@ -31,12 +31,14 @@ export async function submitExamAnswers(userId: string, examPaperId: string, ans
 
       if (question.type === 'FILL_IN_THE_BLANK') {
         const correctAnswer = question.options[0]?.text;
-        correctness = answer === correctAnswer ? 1 : 0;
+        correctness = answer && answer === correctAnswer ? 1 : 0;
       } else {
-        const selectedOptions = answer as string[];
-        const correctOptions = question.options.filter(o => o.isCorrect).map(o => o.id);
-        const correctSelections = selectedOptions.filter(id => correctOptions.includes(id));
-        correctness = correctSelections.length / correctOptions.length;
+        const selectedOptions = answer as string[] || [];
+        if (selectedOptions.length > 0) {
+          const correctOptions = question.options.filter(o => o.isCorrect).map(o => o.id);
+          const correctSelections = selectedOptions.filter(id => correctOptions.includes(id));
+          correctness = correctSelections.length / correctOptions.length;
+        }
       }
 
       // Create exam answer
@@ -44,7 +46,7 @@ export async function submitExamAnswers(userId: string, examPaperId: string, ans
         data: {
           examAttemptId: examAttempt.id,
           examPaperQuestionId: question.id,
-          answer: typeof answer === 'string' ? answer : JSON.stringify(answer),
+          answer: answer ? (typeof answer === 'string' ? answer : JSON.stringify(answer)) : '',
           correctness,
         },
       });
