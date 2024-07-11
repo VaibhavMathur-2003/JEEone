@@ -18,6 +18,7 @@ import {
 } from '@xyflow/react';
 
 import { PhysicsNode, HeaderNode, ChapterNode } from './customNode';
+import { Button } from '@/components/ui/button';
 
 const nodeTypes: NodeTypes = {
   physics: PhysicsNode,
@@ -291,12 +292,28 @@ export default function SubjectFlow() {
   };
 
   return (
-    <div className='h-screen'>
-      <div className='flex flex-col justify-between absolute z-50'>
-        <button onClick={() => handleSubjectChange('Physics')}>Physics</button>
-        <button onClick={() => handleSubjectChange('Maths')}>Maths</button>
-        <button onClick={() => handleSubjectChange('Chemistry')}>Chemistry</button>
-      </div>
+    <div className="h-screen flex">
+    <div className="flex fixed left-0 flex-col h-1/4 justify-between space-y-4  p-4 text-sm  bg-white shadow-md rounded-lg absolute z-50">
+      <Button
+        onClick={() => handleSubjectChange('Physics')}
+        className="px-2 py-1 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200"
+      >
+        Physics
+      </Button>
+      <Button
+        onClick={() => handleSubjectChange('Maths')}
+        className="px-2 py-1 bg-blue-500 text-white font-semibold rounded-lg hover:bg-green-600 transition duration-200"
+      >
+        Maths
+      </Button>
+      <Button
+        onClick={() => handleSubjectChange('Chemistry')}
+        className="px-2 py-1 bg-blue-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-200"
+      >
+        Chemistry
+      </Button>
+    </div>
+    <div className="flex-1">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -309,5 +326,7 @@ export default function SubjectFlow() {
         defaultEdgeOptions={defaultEdgeOptions}
       />
     </div>
+  </div>
+  
   );
 }

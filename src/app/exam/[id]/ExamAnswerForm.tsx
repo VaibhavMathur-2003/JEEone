@@ -39,7 +39,6 @@ const ExamAnswerForm: React.FC<Props> = ({ examPaperQuestion, onAnswerChange }) 
 
   return (
     <div>
-      <p>{examPaperQuestion.text}</p>
       {examPaperQuestion.type === 'FILL_IN_THE_BLANK' ? (
         <input
           type="text"
@@ -51,6 +50,7 @@ const ExamAnswerForm: React.FC<Props> = ({ examPaperQuestion, onAnswerChange }) 
         examPaperQuestion.options.map(option => (
           <div key={option.id}>
             <input
+            className='my-2'
               type={examPaperQuestion.type === 'MULTIPLE_CHOICE_SINGLE' ? 'radio' : 'checkbox'}
               id={`option-${option.id}`}
               name={`question-${examPaperQuestion.id}`}

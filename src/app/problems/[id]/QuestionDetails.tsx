@@ -21,24 +21,40 @@ export default async function QuestionPage({
   
 
   return (
-    <div className="w-1/2 p-6 overflow-y-auto flex justify-between flex-col">
-      <div>
-        <h1 className="text-2xl font-bold mb-4">{question.title}</h1>
-        <div className="flex justify-between w-1/2">
-          <p className="mb-2 text-xs">
-            <span className=""></span> {question.difficulty}
+    <div className="w-1/2 p-8 bg-gray-50 shadow-xl h-[90vh]  rounded-lg overflow-y-scroll flex flex-col justify-between space-y-8">
+    <div>
+      
+      <div className="flex flex-col justify-between mb-6">
+      <h3 className="text-2xl font-bold text-blue-600">{question.title}</h3>
+        <div className="text-sm font-medium flex justify-between items-center w-full m-3 text-gray-600">
+          <p className="flex items-center">
+            <span
+              className={`px-2 py-1 rounded-full ${
+                question.difficulty === 'EASY'
+                  ? 'bg-green-500'
+                  : question.difficulty === 'MEDIUM'
+                  ? 'bg-yellow-500'
+                  : question.difficulty === 'HARD'
+                  ? 'bg-red-500'
+                  : 'bg-gray-500'
+              }`}
+            >
+              {question.difficulty}
+            </span>
           </p>
-          <p className="mb-2 text-xs">
-            <span className=""></span> {question.subject}
+          <p className="flex items-center">
+            <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full">{question.subject}</span>
           </p>
-          <p className="mb-2 text-xs">
-            <span className=""></span> {question.type}
+          <p className="flex items-center">
+            <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full">{question.type}</span>
           </p>
         </div>
-        <p className="mb-4">{question.text}</p>
       </div>
-
-      <AnswerForm question={question} userId={userId} />
+      <p className="text-base text-gray-700 leading-relaxed">{question.text}</p>
     </div>
+  
+    <AnswerForm question={question} userId={userId} />
+  </div>
+  
   );
 }

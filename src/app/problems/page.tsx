@@ -1,6 +1,3 @@
-
-
-
 import Link from "next/link";
 import { db } from "@/db/db";
 import { auth } from "@/auth";
@@ -18,21 +15,21 @@ export default async function QuestionListPage() {
       type: true,
       questionStatus: {
         where: {
-          userId: userId
+          userId: userId,
         },
         select: {
-          status: true
-        }
-      }
+          status: true,
+        },
+      },
     },
   });
 
-  function getStatusIcon(status: string | undefined) {
+  function getStatusIcon(status: string|undefined) {
     switch (status) {
       case "PARTIALLY_SOLVED":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-yellow-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -47,7 +44,7 @@ export default async function QuestionListPage() {
       case "SOLVED":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-green-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -62,7 +59,7 @@ export default async function QuestionListPage() {
       case "ATTEMPTED":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-red-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -84,7 +81,7 @@ export default async function QuestionListPage() {
       case "MULTIPLE_CHOICE_SINGLE":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-blue-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -99,7 +96,7 @@ export default async function QuestionListPage() {
       case "MULTIPLE_CHOICE_MULTIPLE":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-purple-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -114,7 +111,7 @@ export default async function QuestionListPage() {
       case "FILL_IN_THE_BLANK":
         return (
           <svg
-            className="w-4 h-4"
+            className="w-5 h-5 text-teal-500"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -130,34 +127,34 @@ export default async function QuestionListPage() {
         return null;
     }
   }
-  // ... (getTypeIcon function remains unchanged)
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <ul className="divide-y divide-gray-200">
+    <div className="max-w-4xl mx-auto py-8 px-4">
+      <h1 className="text-2xl font-semibold mb-6 text-center">Question List</h1>
+      <ul className="divide-y divide-gray-200 bg-white shadow rounded-lg">
         {questions.map((question) => (
-          <li key={question.id} className="py-1">
+          <li key={question.id} className="py-4 px-6 hover:bg-gray-50 transition duration-300">
             <Link href={`/problems/${question.id}`}>
-              <div className="block hover:bg-gray-50 rounded-lg p-1 transition duration-300">
-                <div className="flex items-center justify-between text-sm text-gray-600">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
                   {getStatusIcon(question.questionStatus[0]?.status)}
-
-                  <div className="text-sm text-gray-900">{question.title}</div>
+                  <div className="text-gray-800 font-medium">{question.title}</div>
+                </div>
+                <div className="flex items-center space-x-4">
                   <div
-                    className={`inline-flex items-center px-2 py-1 rounded-full ${
+                    className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
                       question.difficulty === "EASY"
-                        ? "text-green-500 "
+                        ? "bg-green-100 text-green-800"
                         : question.difficulty === "MEDIUM"
-                        ? "text-orange-500 "
+                        ? "bg-yellow-100 text-yellow-800"
                         : question.difficulty === "HARD"
-                        ? "text-red-500 "
-                        : "text-gray-300 text-gray-800"
+                        ? "bg-red-100 text-red-800"
+                        : "bg-gray-100 text-gray-800"
                     }`}
                   >
                     {question.difficulty.toLowerCase()}
                   </div>
-                  <div className="text-sm text-gray-900">{question.subject}</div>
-
+                  <div className="text-gray-600">{question.subject}</div>
                   {getTypeIcon(question.type)}
                 </div>
               </div>

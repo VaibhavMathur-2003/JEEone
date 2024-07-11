@@ -28,7 +28,7 @@ const ExamPaper: React.FC<Props> = async ({ examPaperId, userId }) => {
     return <div>Exam paper not found</div>;
   }
 
-  return <ExamPaperClient examPaper={examPaper} userId={userId} />;
+  return <ExamPaperClient examPaper={examPaper} userId={userId} duration={examPaper.duration}/>;
 }
 
 export default ExamPaper;

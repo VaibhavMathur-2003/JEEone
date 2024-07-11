@@ -79,8 +79,6 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
         ))
       )}
       <button type="submit">Submit Answer</button>
-      {feedback && <p>{feedback}</p>}
-      {status && <p>Question Status: {status}</p>}
     </form>
   );
 };

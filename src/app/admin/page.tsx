@@ -40,63 +40,105 @@ const QuestionForm: React.FC = () => {
   };
 
   return (
-    <form action={createQuestion}>
-      <input type="text"name='title' placeholder='title' required />
-      <input type="text" name="text" placeholder="Question text" required />
-      <select name="difficulty" required>
-        <option value="EASY">Easy</option>
-        <option value="MEDIUM">Medium</option>
-        <option value="HARD">Hard</option>
-      </select>
-      <input type="text" name="subject" placeholder="Subject" required />
-      <textarea name="explanation" placeholder="Explanation" required />
-      <select 
-        name="type" 
-        value={questionType} 
-        onChange={(e) => setQuestionType(e.target.value as QuestionType)}
-        required
-      >
-        <option value="MULTIPLE_CHOICE_SINGLE">Single Option Correct</option>
-        <option value="MULTIPLE_CHOICE_MULTIPLE">Multiple Options Correct</option>
-        <option value="FILL_IN_THE_BLANK">Fill in the Blank</option>
-      </select>
-
-      <div>
-        <input
-          type="text"
-          value={newOption.text}
-          onChange={handleOptionChange}
-          name="text"
-          placeholder={questionType === 'FILL_IN_THE_BLANK' ? "Correct answer" : "Option text"}
-        />
-        {questionType !== 'FILL_IN_THE_BLANK' && (
-          <label>
-            <input
-              type="checkbox"
-              name="isCorrect"
-              checked={newOption.isCorrect}
-              onChange={handleOptionChange}
-            />
-            Correct
-          </label>
-        )}
-        <button type="button" onClick={addOption} disabled={questionType === 'FILL_IN_THE_BLANK' && options.length > 0}>
-          {questionType === 'FILL_IN_THE_BLANK' ? 'Set Answer' : 'Add Option'}
-        </button>
-      </div>
-
-      <ul>
-        {options.map((option, index) => (
-          <li key={index}>
-            {option.text} - {option.isCorrect ? 'Correct' : 'Incorrect'}
-          </li>
-        ))}
-      </ul>
-
-      <input type="hidden" name="options" value={JSON.stringify(options)} />
-
-      <button type="submit">Submit Question</button>
-    </form>
+    <form action={createQuestion} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+    <input
+      type="text"
+      name="title"
+      placeholder="Title"
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    />
+    <input
+      type="text"
+      name="text"
+      placeholder="Question text"
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    />
+    <select
+      name="difficulty"
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    >
+      <option value="EASY">Easy</option>
+      <option value="MEDIUM">Medium</option>
+      <option value="HARD">Hard</option>
+    </select>
+    <input
+      type="text"
+      name="subject"
+      placeholder="Subject"
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    />
+    <textarea
+      name="explanation"
+      placeholder="Explanation"
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    ></textarea>
+    <select
+      name="type"
+      value={questionType}
+      onChange={(e) => setQuestionType(e.target.value as QuestionType)}
+      required
+      className="w-full px-4 py-2 mb-4 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+    >
+      <option value="MULTIPLE_CHOICE_SINGLE">Single Option Correct</option>
+      <option value="MULTIPLE_CHOICE_MULTIPLE">Multiple Options Correct</option>
+      <option value="FILL_IN_THE_BLANK">Fill in the Blank</option>
+    </select>
+  
+    <div className="mb-4">
+      <input
+        type="text"
+        value={newOption.text}
+        onChange={handleOptionChange}
+        name="text"
+        placeholder={questionType === 'FILL_IN_THE_BLANK' ? "Correct answer" : "Option text"}
+        className="w-full px-4 py-2 mb-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+      />
+      {questionType !== 'FILL_IN_THE_BLANK' && (
+        <label className="flex items-center mt-2">
+          <input
+            type="checkbox"
+            name="isCorrect"
+            checked={newOption.isCorrect}
+            onChange={handleOptionChange}
+            className="mr-2 leading-tight"
+          />
+          <span className="text-sm">Correct</span>
+        </label>
+      )}
+    </div>
+  
+    <button
+      type="button"
+      onClick={addOption}
+      disabled={questionType === 'FILL_IN_THE_BLANK' && options.length > 0}
+      className="w-full py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+    >
+      {questionType === 'FILL_IN_THE_BLANK' ? 'Set Answer' : 'Add Option'}
+    </button>
+  
+    <ul className="mt-4">
+      {options.map((option, index) => (
+        <li key={index} className="text-sm text-gray-700">
+          {option.text} - {option.isCorrect ? 'Correct' : 'Incorrect'}
+        </li>
+      ))}
+    </ul>
+  
+    <input type="hidden" name="options" value={JSON.stringify(options)} />
+  
+    <button
+      type="submit"
+      className="w-full py-2 mt-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:bg-green-600"
+    >
+      Submit Question
+    </button>
+  </form>
+  
   );
 };
 

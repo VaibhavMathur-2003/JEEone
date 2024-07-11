@@ -29,7 +29,7 @@ export default async function RootLayout({
           inter.variable
         )}
       >
-        <header className="px-4 lg:px-6 h-14 flex items-center justify-between bg-blue-200 sticky top-0">
+        <header className="px-4 z-50 lg:px-6 h-14 flex items-center justify-between bg-blue-200 sticky top-0">
           <Link
             href="/"
             className="flex items-center justify-center"

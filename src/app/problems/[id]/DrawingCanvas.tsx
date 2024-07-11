@@ -59,7 +59,7 @@ export default function DrawingCanvas() {
   }, []);
 
   return (
-    <div className="w-full h-[calc(100vh-15rem)] overflow-y-scroll">
+    <div className="w-full h-[calc(100vh-10rem)] overflow-y-scroll">
       <canvas
         ref={canvasRef}
         className="w-full h-full border border-gray-300 bg-white"
