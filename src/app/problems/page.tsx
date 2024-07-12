@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { db } from "@/db/db";
 import { auth } from "@/auth";
+import { Suspense } from "react";
 
 export default async function QuestionListPage() {
   const session = await auth();
@@ -132,6 +133,7 @@ export default async function QuestionListPage() {
     <div className="max-w-4xl mx-auto py-8 px-4">
       <h1 className="text-2xl font-semibold mb-6 text-center">Question List</h1>
       <ul className="divide-y divide-gray-200 bg-white shadow rounded-lg">
+        <Suspense fallback={<div>Loading...</div>}>
         {questions.map((question) => (
           <li key={question.id} className="py-4 px-6 hover:bg-gray-50 transition duration-300">
             <Link href={`/problems/${question.id}`}>
@@ -160,7 +162,7 @@ export default async function QuestionListPage() {
               </div>
             </Link>
           </li>
-        ))}
+        ))}</Suspense>
       </ul>
     </div>
   );

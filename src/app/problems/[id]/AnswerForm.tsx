@@ -17,7 +17,11 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
 
   useEffect(() => {
     setStatus(question.questionStatus?.[0]?.status || 'UNATTEMPTED');
-  }, [question.questionStatus]);
+    setFeedback(null);
+    // Reset the answer when the question changes
+    setSelectedOptions([]);
+    setTextAnswer('');
+  }, [question.questionStatus, question.id]);
 
   const handleOptionChange = (optionId: number) => {
     if (question.type === 'MULTIPLE_CHOICE_SINGLE') {
@@ -54,32 +58,44 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      {question.type === 'FILL_IN_THE_BLANK' ? (
-        <input
-          type="text"
-          value={textAnswer}
-          onChange={(e) => setTextAnswer(e.target.value)}
-          placeholder="Your answer"
-          required
-        />
-      ) : (
-        question.options.map(option => (
-          <div key={option.id}>
-            <input
-              type={question.type === 'MULTIPLE_CHOICE_SINGLE' ? 'radio' : 'checkbox'}
-              id={`option-${option.id}`}
-              name="answer"
-              value={option.id}
-              checked={selectedOptions.includes(option.id)}
-              onChange={() => handleOptionChange(option.id)}
-            />
-            <label htmlFor={`option-${option.id}`}>{option.text}</label>
-          </div>
-        ))
+    <div>
+      <form onSubmit={handleSubmit}>
+        {question.type === 'FILL_IN_THE_BLANK' ? (
+          <input
+            type="text"
+            value={textAnswer}
+            onChange={(e) => setTextAnswer(e.target.value)}
+            placeholder="Your answer"
+            required
+          />
+        ) : (
+          question.options.map(option => (
+            <div key={option.id}>
+              <input
+                type={question.type === 'MULTIPLE_CHOICE_SINGLE' ? 'radio' : 'checkbox'}
+                id={`option-${option.id}`}
+                name="answer"
+                value={option.id}
+                checked={selectedOptions.includes(option.id)}
+                onChange={() => handleOptionChange(option.id)}
+              />
+              <label htmlFor={`option-${option.id}`}>{option.text}</label>
+            </div>
+          ))
+        )}
+        <button type="submit">Submit Answer</button>
+      </form>
+      {feedback && (
+        <div className={`feedback ${status === 'CORRECT' ? 'correct' : status === 'INCORRECT' ? 'incorrect' : ''}`}>
+          {feedback}
+        </div>
       )}
-      <button type="submit">Submit Answer</button>
-    </form>
+      {status && status !== 'UNATTEMPTED' && (
+        <div className="status">
+          Status: {status}
+        </div>
+      )}
+    </div>
   );
 };
 

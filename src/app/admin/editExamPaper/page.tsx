@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { editExamPaper, getExamPaper } from './actions';
+import { deleteExamPaper, editExamPaper, getExamPaper } from './actions';
 
 interface ExamPaperQuestion {
   id: string;
@@ -134,6 +134,10 @@ export default function EditExamPaper() {
           Fetch Exam Paper
         </button>
       </div>
+      <form action={deleteExamPaper}>
+      <input type="text" name="examPaperId" placeholder="Enter Exam Paper ID" />
+      <button type="submit">Delete Exam</button>
+    </form>
 
       {loading && <div>Loading...</div>}
       {error && <div className="text-red-500">{error}</div>}

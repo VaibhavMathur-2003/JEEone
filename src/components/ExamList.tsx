@@ -1,5 +1,6 @@
 import { db } from "@/db/db";
 import Link from "next/link";
+import { Suspense } from "react";
 
 const ExamList = async () => {
   const examPapers = await db.examPaper.findMany({
@@ -14,6 +15,7 @@ const ExamList = async () => {
   const colors = ['bg-blue-100', 'bg-green-100', 'bg-yellow-100', 'bg-red-100'];
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
+      <Suspense fallback={<div>Loading...</div>}>
     {examPapers.map((exam, index) => (
       <Link href={`/exam/${exam.id}`} key={exam.id}>
         <div className={`p-4 mb-4 rounded-lg shadow-sm hover:shadow-md transition duration-200 cursor-pointer ${colors[index % colors.length]}`}>
@@ -28,7 +30,7 @@ const ExamList = async () => {
           </div>
         </div>
       </Link>
-    ))}
+    ))}</Suspense>
   </div>
   );
 };
