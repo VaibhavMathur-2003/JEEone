@@ -1,6 +1,6 @@
 // ExamPaperClient.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,  useCallback } from "react";
 import {
   ExamPaper as ExamPaperType,
   ExamPaperQuestion,
@@ -8,6 +8,7 @@ import {
 } from "@prisma/client";
 import ExamAnswerForm from "@/app/exam/[id]/ExamAnswerForm";
 import { submitExamAnswers } from "./action";
+import { redirect } from "next/navigation";
 
 interface Props {
   examPaper: ExamPaperType & {
@@ -23,6 +24,10 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(duration * 60);
+  // Add these state variables inside the ExamPaperClient component
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const [fullScreenExitCount, setFullScreenExitCount] = useState(0);
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
 
   const handleAnswerChange = (
     questionId: string,
@@ -49,7 +54,9 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes.toString().padStart(2, "0")}:${remainingSeconds
+      .toString()
+      .padStart(2, "0")}`;
   };
 
   const handleSubmit = async () => {
@@ -66,6 +73,41 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
     }
     setIsSubmitting(false);
   };
+  const enterFullScreen = useCallback(() => {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    }
+  }, []);
+
+  const handleFullScreenChange = useCallback(() => {
+    setIsFullScreen(!!document.fullscreenElement);
+    if (!document.fullscreenElement) {
+      setFullScreenExitCount((prevCount) => prevCount + 1);
+    }
+  }, []);
+
+  const handleVisibilityChange = useCallback(() => {
+    if (document.hidden) {
+      setTabSwitchCount((prevCount) => prevCount + 1);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("fullscreenchange", handleFullScreenChange);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullScreenChange);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [handleFullScreenChange, handleVisibilityChange]);
+
+  useEffect(() => {
+    if (fullScreenExitCount > 2 || tabSwitchCount > 2) {
+      handleSubmit();
+      redirect('/exam')
+    }
+  }, [fullScreenExitCount, tabSwitchCount]);
 
   const handleNext = () => {
     if (currentQuestionIndex < examPaper.questions.length - 1) {
@@ -83,14 +125,34 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
 
   return (
     <div className=" bg-gradient-to-b overflow-hidden max-h-[90vh] from-gray-100 to-gray-200 py-8 px-4 sm:px-6 lg:px-8">
+      {!isFullScreen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-8 rounded-lg text-center">
+            <p className="text-xl font-bold mb-4">
+              Please enter full-screen mode to start the exam.
+            </p>
+            <button
+              onClick={enterFullScreen}
+              className="px-6 py-2 bg-blue-500 text-white rounded-lg"
+            >
+              Enter Full Screen
+            </button>
+          </div>
+        </div>
+      )}
       <div className=" mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1 flex flex-col justify-between p-6 lg:p-8 overflow-y-scroll h-[85vh]">
             <div>
-            <p className="text-xl font-bold text-red-600 mb-4">
+              <p className="text-xl font-bold text-red-600 mb-4">
                 Time Remaining: {formatTime(timeRemaining)}
               </p>
-
+              <p className="text-lg font-semibold text-yellow-600 mb-4">
+                Full-screen exits: {fullScreenExitCount}/3
+              </p>
+              <p className="text-lg font-semibold text-yellow-600 mb-4">
+                Tab switches: {tabSwitchCount}/3
+              </p>
               <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
                 {examPaper.title}
               </h1>
