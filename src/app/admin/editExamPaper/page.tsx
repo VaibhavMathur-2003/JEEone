@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { deleteExamPaper, editExamPaper, getExamPaper } from './actions';
+import { redirect } from 'next/navigation';
 
 interface ExamPaperQuestion {
   id: string;
@@ -42,7 +43,7 @@ export default function EditExamPaper() {
 
     try {
       const data = await getExamPaper(examPaperId);
-      setExamPaper(data);
+      setExamPaper(data as ExamPaper|null);
     } catch (err) {
       setError('Error fetching exam paper');
       console.error(err);
@@ -53,7 +54,10 @@ export default function EditExamPaper() {
 
   const handleExamPaperChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setExamPaper(prev => prev ? { ...prev, [name]: value } : null);
+    if (name === 'totalMarks' || name === 'duration') {
+      setExamPaper(prev => prev ? { ...prev, [name]: parseFloat(value) } : null);
+    }
+    else setExamPaper(prev => prev ? { ...prev, [name]: value } : null);
   };
 
   const handleQuestionChange = (index: number, field: keyof ExamPaperQuestion, value: any) => {
@@ -109,6 +113,7 @@ export default function EditExamPaper() {
     try {
       await editExamPaper(examPaper);
       alert('Exam paper updated successfully');
+      redirect('/exam')
     } catch (err) {
       setError('Error updating exam paper');
       console.error(err);

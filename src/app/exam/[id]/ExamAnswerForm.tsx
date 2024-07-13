@@ -13,7 +13,6 @@ const ExamAnswerForm: React.FC<Props> = ({ examPaperQuestion, onAnswerChange }) 
   const [textAnswer, setTextAnswer] = useState('');
 
   useEffect(() => {
-    // Reset state when question changes
     setSelectedOptions([]);
     setTextAnswer('');
   }, [examPaperQuestion.id]);

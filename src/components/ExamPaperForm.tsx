@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ExamPaper, ExamPaperQuestion, ExamPaperQuestionOption } from '@/types/examTypes';
+import { redirect } from 'next/navigation';
 
 type ExamPaperFormProps = {
   addExamPaper: (examPaper: ExamPaper) => Promise<{ success: boolean; examPaper?: any; error?: string }>;
@@ -84,7 +85,7 @@ export default function ExamPaperForm({ addExamPaper }: ExamPaperFormProps) {
     const result = await addExamPaper(examPaper);
     if (result.success) {
       setMessage('Exam paper added successfully!');
-      // Optionally reset the form or redirect
+      redirect('/exam')
     } else {
       setMessage(`Failed to add exam paper: ${result.error}`);
     }

@@ -43,7 +43,6 @@ const SignInForm = () => {
         if (signInError) {
           setError(signInError);
         } else {
-          router.push('/problems');
           router.refresh()
         }
       }}

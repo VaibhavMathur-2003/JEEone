@@ -1,14 +1,10 @@
-// actions.ts
 'use server';
 
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { db } from '@/db/db';
 
 export async function submitExamAnswers(userId: string, examPaperId: string, answers: Record<string, string[] | string>) {
   try {
-    // Create exam attempt
-    const examAttempt = await prisma.examAttempt.create({
+    const examAttempt = await db.examAttempt.create({
       data: {
         userId,
         examPaperId,
@@ -18,13 +14,11 @@ export async function submitExamAnswers(userId: string, examPaperId: string, ans
 
     let totalScore = 0;
 
-    // Fetch all questions for this exam paper
-    const questions = await prisma.examPaperQuestion.findMany({
+    const questions = await db.examPaperQuestion.findMany({
       where: { examPaperId },
       include: { options: true },
     });
 
-    // Submit answers and calculate score
     for (const question of questions) {
       const answer = answers[question.id];
       let correctness = 0;
@@ -41,8 +35,7 @@ export async function submitExamAnswers(userId: string, examPaperId: string, ans
         }
       }
 
-      // Create exam answer
-      await prisma.examAnswer.create({
+      await db.examAnswer.create({
         data: {
           examAttemptId: examAttempt.id,
           examPaperQuestionId: question.id,
@@ -54,8 +47,7 @@ export async function submitExamAnswers(userId: string, examPaperId: string, ans
       totalScore += correctness * question.positiveMarks;
     }
 
-    // Update exam attempt with final score
-    await prisma.examAttempt.update({
+    await db.examAttempt.update({
       where: { id: examAttempt.id },
       data: { score: totalScore },
     });

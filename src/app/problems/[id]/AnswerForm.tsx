@@ -18,7 +18,6 @@ const AnswerForm: React.FC<Props> = ({ question, userId }) => {
   useEffect(() => {
     setStatus(question.questionStatus?.[0]?.status || 'UNATTEMPTED');
     setFeedback(null);
-    // Reset the answer when the question changes
     setSelectedOptions([]);
     setTextAnswer('');
   }, [question.questionStatus, question.id]);

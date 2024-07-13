@@ -1,4 +1,3 @@
-// ExamPaperClient.tsx
 "use client";
 import React, { useEffect, useState,  useCallback } from "react";
 import {
@@ -24,7 +23,6 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
   const [finalScore, setFinalScore] = useState<number | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(duration * 60);
-  // Add these state variables inside the ExamPaperClient component
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [fullScreenExitCount, setFullScreenExitCount] = useState(0);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
@@ -144,6 +142,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1 flex flex-col justify-between p-6 lg:p-8 overflow-y-scroll h-[85vh]">
             <div>
+              <div className="flex justify-between">
               <p className="text-xl font-bold text-red-600 mb-4">
                 Time Remaining: {formatTime(timeRemaining)}
               </p>
@@ -153,6 +152,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
               <p className="text-lg font-semibold text-yellow-600 mb-4">
                 Tab switches: {tabSwitchCount}/3
               </p>
+              </div>
               <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
                 {examPaper.title}
               </h1>

@@ -12,11 +12,9 @@ export default function DrawingCanvas() {
     const context = canvas.getContext('2d');
     if (!context) return;
 
-    // Set canvas size
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Set up drawing properties
     context.strokeStyle = 'black';
     context.lineWidth = 2;
     context.lineCap = 'round';
@@ -43,13 +41,11 @@ export default function DrawingCanvas() {
       isDrawing = false;
     }
 
-    // Add event listeners
     canvas.addEventListener('mousedown', startDrawing);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stopDrawing);
     canvas.addEventListener('mouseout', stopDrawing);
 
-    // Cleanup
     return () => {
       canvas.removeEventListener('mousedown', startDrawing);
       canvas.removeEventListener('mousemove', draw);

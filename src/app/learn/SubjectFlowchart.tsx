@@ -277,7 +277,7 @@ export default function SubjectFlow() {
     [setEdges],
   );
 
-  const handleSubjectChange = (newSubject) => {
+  const handleSubjectChange = (newSubject:string) => {
     setSubject(newSubject);
     if (newSubject === 'Physics') {
       setNodes(initialPhysicsNodes);

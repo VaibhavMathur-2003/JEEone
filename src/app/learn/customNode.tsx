@@ -22,7 +22,7 @@ export const PhysicsNode: React.FC<NodeProps> = ({ data }) => (
     fontSize: '18px',
   }}>
     <Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} />
-    {data.label}
+    {data.label as string}
   </div>
 );
 
@@ -37,7 +37,7 @@ export const HeaderNode: React.FC<NodeProps> = ({ data }) => (
     fontFamily: 'Arial'
   }}>
     <Handle type="target" position={Position.Top} style={{ borderRadius: '50%' }} />
-    {data.label}
+    {data.label as string}
     <Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} />
   </div>
 );
@@ -53,7 +53,7 @@ export const ChapterNode: React.FC<NodeProps> = ({ data }) => (
     fontFamily: 'Monospace'
   }}>
     <Handle type="target" position={Position.Top} style={{ borderRadius: '50%' }} />
-    {data.label}
+    {data.label as string}
     <Handle type="source" position={Position.Bottom} style={{ borderRadius: '50%' }} />
 
   </div>

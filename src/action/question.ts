@@ -1,5 +1,6 @@
 'use server';
 import { db } from "@/db/db";
+import { redirect } from "next/navigation";
 
 export async function createQuestion(formData: FormData) {
   const title = formData.get('title') as string;
@@ -28,10 +29,9 @@ export async function createQuestion(formData: FormData) {
       },
     });
 
-    console.log('Question created:', question);
-    // You can add a redirect or some other action here
+    redirect('/problems')
   } catch (error) {
     console.error('Error creating question:', error);
-    // Handle the error (e.g., by throwing it or returning an error message)
+    
   }
 }

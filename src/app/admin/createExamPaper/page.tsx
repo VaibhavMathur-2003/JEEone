@@ -21,7 +21,7 @@ async function addExamPaper(examPaper: ExamPaper) {
             type: question.type,
             positiveMarks: question.positiveMarks,
             negativeMarks: question.negativeMarks,
-            order: index + 1, // Add this line to set the order
+            order: index + 1,
             options: {
               create: question.options.map((option) => ({
                 text: option.text,

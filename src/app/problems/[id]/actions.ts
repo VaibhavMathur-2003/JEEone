@@ -63,7 +63,6 @@ export async function submitAnswer(questionId: number, userId: string, answer: n
       },
     });
 
-    // Update or create QuestionStatus
     await db.questionStatus.upsert({
       where: {
         userId_questionId: {
