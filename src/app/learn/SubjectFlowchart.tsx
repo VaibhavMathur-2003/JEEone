@@ -26,7 +26,7 @@ const nodeTypes: NodeTypes = {
   chapter: ChapterNode,
 };
 
-import { initialPhysicsNodes, initialPhysicsEdges } from './data';
+import { initialPhysicsNodes, initialPhysicsEdges } from '@/data/physicsData';
 
 // Physics Nodes and Edges
 
@@ -69,11 +69,11 @@ export default function SubjectFlow() {
       newNodes = initialPhysicsNodes;
       newEdges = initialPhysicsEdges;
     } else if (newSubject === 'Maths') {
-      const { initialMathsNodes, initialMathsEdges } = await import('./data');
+      const { initialMathsNodes, initialMathsEdges } = await import('@/data/mathsData');
       newNodes = initialMathsNodes;
       newEdges = initialMathsEdges;
     } else if (newSubject === 'Chemistry') {
-      const { initialChemistryNodes, initialChemistryEdges } = await import('./data');
+      const { initialChemistryNodes, initialChemistryEdges } = await import('@/data/chemistryData');
       newNodes = initialChemistryNodes;
       newEdges = initialChemistryEdges;
     }

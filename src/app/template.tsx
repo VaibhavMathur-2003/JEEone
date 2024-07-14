@@ -12,7 +12,7 @@ const Template = async ({ children }: { children: React.ReactNode }) => {
             className="flex items-center justify-center"
             prefetch={false}
           >
-            <span className="font-bold text-lg italic">JEEnius</span>
+            <span className="font-bold text-lg italic">JEEone</span>
           </Link>
           <nav className="flex gap-4 sm:gap-10">
             <Link

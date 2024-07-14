@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Component() {
@@ -11,7 +12,7 @@ export default function Component() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Open Doors of IIT With JEEnius
+                    Open Doors of IIT With JEEone
                   </h1>
                   <p className="max-w-[600px] text-muted-foreground md:text-xl">
                     Unlock your full potential with our comprehensive practice
@@ -35,7 +36,7 @@ export default function Component() {
                   </Link>
                 </div>
               </div>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                 width="550"
                 height="550"
@@ -110,7 +111,7 @@ export default function Component() {
                   </li>
                 </ul>
               </div>
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8U3R1ZGVudHxlbnwwfHwwfHx8MA%3D%3D"
                 width="550"
                 height="310"
@@ -138,7 +139,7 @@ export default function Component() {
               </div>
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-              <img
+              <Image
                 src="https://png.pngtree.com/thumb_back/fh260/background/20230610/pngtree-this-image-displays-an-empty-room-full-of-people-trying-to-image_2950957.jpg"
                 width="550"
                 height="310"
