@@ -47,6 +47,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
     }, 1000);
 
     return () => clearInterval(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const formatTime = (seconds: number) => {
