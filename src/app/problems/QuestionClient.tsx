@@ -138,6 +138,7 @@ export default function QuestionListClient({
     if (debouncedSearch !== searchParams.get("search")) {
       updateSearchParams("search", debouncedSearch);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   function updateSearchParams(key: string, value: string) {

@@ -34,6 +34,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
     setAnswers((prev) => ({ ...prev, [questionId]: answer }));
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeRemaining((prevTime) => {
@@ -45,7 +46,6 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
         return prevTime - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -106,6 +106,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
       handleSubmit();
       redirect('/exam')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullScreenExitCount, tabSwitchCount]);
 
   const handleNext = () => {
