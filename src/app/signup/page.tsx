@@ -1,5 +1,4 @@
 import { db } from "@/db/db";
-import { hash } from "bcryptjs";
 import React from "react";
 
 import {
@@ -11,6 +10,43 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function handleSubmit(formData: FormData) {
+  const name = formData.get("username") as string | undefined;
+  const email = formData.get("email") as string | undefined;
+  const password = formData.get("password") as string | undefined;
+
+  if (!email || !password || !name) {
+    throw new Error("Please fill all the fields");
+  }
+
+  const user = await db.user.findUnique({
+    where: { email },
+  });
+
+  if (user) {
+    throw new Error("User already Exists");
+  }
+
+  const hashedPassword = await hashPassword(password);
+
+  await db.user.create({
+    data: {
+      email: email,
+      username: name,
+      password: hashedPassword,
+    },
+  });
+}
 
 export default function Component() {
   return (
@@ -25,37 +61,16 @@ export default function Component() {
         <CardContent>
           <div className="space-y-4">
             <form
-              action={async (formData: FormData) => {
+              action={async (formData) => {
                 "use server";
-                const name = formData.get("username") as string | undefined;
-                const email = formData.get("email") as string | undefined;
-                const password = formData.get("password") as string | undefined;
-
-                if (!email || !password || !name)
-                  throw new Error("Please fill all the fields");
-
-                const user = await db.user.findUnique({
-                  where: { email },
-                });
-
-                if (user) throw new Error("User already Exists");
-
-                const hashedPassword = await hash(password, 10);
-
-                await db.user.create({
-                  data: {
-                    email: email,
-                    username: name,
-                    password: hashedPassword,
-                  },
-                });
+                await handleSubmit(formData);
               }}
             >
               <div className="my-4">
                 <Input type="email" placeholder="Email" name="email" />
               </div>
               <div className="my-4">
-                <Input type="username" placeholder="Name" name="username" />
+                <Input type="text" placeholder="Username" name="username" />
               </div>
               <div className="my-4">
                 <Input type="password" placeholder="Password" name="password" />

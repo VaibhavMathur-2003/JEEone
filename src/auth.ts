@@ -2,7 +2,22 @@ import NextAuth, { CredentialsSignin, DefaultSession } from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 import { db } from "@/db/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import { compare } from "bcryptjs";
+
+
+async function hashPassword(password: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hash))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function verifyPassword(password: string, hashedPassword: string): Promise<boolean> {
+  const hashedInput = await hashPassword(password);
+  return hashedInput === hashedPassword;
+}
+
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -43,7 +58,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         if (!email || !password) throw new Error("no email, passoword");
 
-        const isPasswordValid = await compare(password, user.password);
+        const isPasswordValid = await verifyPassword(password, user.password);
 
         if (!isPasswordValid) {
           throw new CredentialsSignin("Wrong Password");
