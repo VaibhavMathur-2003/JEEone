@@ -1,14 +1,14 @@
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
-
 generator client {
   provider = "prisma-client-js"
 }
 
 model User {
-  id              String           @id @default(cuid())
+  id              String           @id @default(uuid()) // Changed to uuid()
   username        String           @unique
   email           String           @unique
   emailVerified   DateTime?
@@ -44,7 +44,7 @@ model Question {
 }
 
 model QuestionStatus {
-  id         String   @id @default(cuid())
+  id         String   @id @default(uuid()) // Changed to uuid()
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   question   Question @relation(fields: [questionId], references: [id])
@@ -55,7 +55,7 @@ model QuestionStatus {
 }
 
 model Attempt {
-  id              String          @id @default(cuid())
+  id              String          @id @default(uuid()) // Changed to uuid()
   createdAt       DateTime        @default(now())
   user            User            @relation(fields: [userId], references: [id])
   userId          String
@@ -76,7 +76,7 @@ model Option {
 }
 
 model AttemptOption {
-  id        String  @id @default(cuid())
+  id        String  @id @default(uuid()) // Changed to uuid()
   attempt   Attempt @relation(fields: [attemptId], references: [id])
   attemptId String
   option    Option  @relation(fields: [optionId], references: [id])
@@ -86,11 +86,11 @@ model AttemptOption {
 }
 
 model ExamPaper {
-  id          String              @id @default(cuid())
+  id          String              @id @default(uuid()) // Changed to uuid()
   title       String
   description String?
-  totalMarks  Float               @default(0) // Added default value
-  duration    Int                 @default(60) // Added default value (60 minutes)
+  totalMarks  Float               @default(0)
+  duration    Int                 @default(60)
   questions   ExamPaperQuestion[]
   attempts    ExamAttempt[]
   createdAt   DateTime            @default(now())
@@ -98,7 +98,7 @@ model ExamPaper {
 }
 
 model ExamPaperQuestion {
-  id            String                    @id @default(cuid())
+  id            String                    @id @default(uuid()) // Changed to uuid()
   title         String                    @default("Untitled Question")
   text          String                    @default("")
   subject       String                    @default("General")
@@ -115,7 +115,7 @@ model ExamPaperQuestion {
 }
 
 model ExamAnswer {
-  id                  String             @id @default(cuid())
+  id                  String             @id @default(uuid()) // Changed to uuid()
   examAttempt         ExamAttempt        @relation(fields: [examAttemptId], references: [id])
   examAttemptId       String
   examPaperQuestion   ExamPaperQuestion? @relation(fields: [examPaperQuestionId], references: [id])
@@ -128,7 +128,7 @@ model ExamAnswer {
 }
 
 model ExamPaperQuestionOption {
-  id                  String            @id @default(cuid())
+  id                  String            @id @default(uuid()) // Changed to uuid()
   text                String
   isCorrect           Boolean
   examPaperQuestion   ExamPaperQuestion @relation(fields: [examPaperQuestionId], references: [id])
@@ -138,7 +138,7 @@ model ExamPaperQuestionOption {
 }
 
 model ExamAttempt {
-  id          String      @id @default(cuid())
+  id          String      @id @default(uuid()) // Changed to uuid()
   user        User        @relation(fields: [userId], references: [id])
   userId      String
   examPaper   ExamPaper   @relation(fields: [examPaperId], references: [id])
