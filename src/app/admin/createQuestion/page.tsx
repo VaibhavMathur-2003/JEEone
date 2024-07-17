@@ -39,6 +39,8 @@ const QuestionForm: React.FC = () => {
     setNewOption({ text: '', isCorrect: false });
   };
 
+  
+
   return (
     <form action={createQuestion} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
     <input

@@ -6,6 +6,7 @@ export default async function adminPage () {
       <Link href="/admin/createQuestion">Create Question</Link>
       <Link href="/admin/createExamPaper">Create Exam</Link>
       <Link href="/admin/editExamPaper">Edit Exam</Link>
+      <Link href="/admin/editQuestion">Edit Question</Link>
     </div>
   );
 }

@@ -29,7 +29,6 @@ export async function createQuestion(formData: FormData) {
       },
     });
 
-    redirect('/problems')
   } catch (error) {
     console.error('Error creating question:', error);
     
