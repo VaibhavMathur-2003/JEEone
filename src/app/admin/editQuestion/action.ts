@@ -3,10 +3,10 @@
 import { db } from "@/db/db";
 
 interface Option {
-    id: number; // Changed from string to number
+    id: number;
     text: string;
     isCorrect: boolean;
-    questionId: number; // Added this field
+    questionId: number;
   }
 
 export async function getQuestion(questionId: number) {
@@ -34,7 +34,6 @@ export async function getQuestion(questionId: number) {
 export async function editQuestion(question: any) {
     try {
       await db.$transaction(async (prisma) => {
-        // Update the main question
         await prisma.question.update({
           where: { id: question.id },
           data: {
@@ -48,18 +47,15 @@ export async function editQuestion(question: any) {
           }
         });
   
-        // Get existing option IDs
         const existingOptions = await prisma.option.findMany({
           where: { questionId: question.id },
           select: { id: true }
         });
         const existingOptionIds = existingOptions.map(o => o.id);
   
-        // Separate new and existing options
         const newOptions = question.options.filter((o: Option) => !existingOptionIds.includes(o.id));
         const updatedOptions = question.options.filter((o: Option) => existingOptionIds.includes(o.id));
   
-        // Delete options that are no longer present
         const optionIdsToKeep = updatedOptions.map((o: Option) => o.id);
         await prisma.option.deleteMany({
           where: {
@@ -68,7 +64,6 @@ export async function editQuestion(question: any) {
           }
         });
   
-        // Update existing options
         for (const option of updatedOptions) {
           await prisma.option.update({
             where: { id: option.id },
@@ -79,7 +74,6 @@ export async function editQuestion(question: any) {
           });
         }
   
-        // Create new options
         if (newOptions.length > 0) {
           await prisma.option.createMany({
             data: newOptions.map((o: Option) => ({
@@ -105,7 +99,6 @@ export async function deleteQuestion(questionId: number) {
 
   try {
     await db.$transaction(async (prisma) => {
-      // Delete related AttemptOptions
       await prisma.attemptOption.deleteMany({
         where: {
           option: {
@@ -114,22 +107,18 @@ export async function deleteQuestion(questionId: number) {
         }
       });
 
-      // Delete related Attempts
       await prisma.attempt.deleteMany({
         where: { questionId: questionId }
       });
 
-      // Delete related QuestionStatus
       await prisma.questionStatus.deleteMany({
         where: { questionId: questionId }
       });
 
-      // Delete related Options
       await prisma.option.deleteMany({
         where: { questionId: questionId }
       });
 
-      // Finally, delete the Question
       await prisma.question.delete({
         where: { id: questionId }
       });

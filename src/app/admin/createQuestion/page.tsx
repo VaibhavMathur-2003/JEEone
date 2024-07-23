@@ -4,12 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { createQuestion } from '@/action/question';
 
 type QuestionType = 'MULTIPLE_CHOICE_SINGLE' | 'MULTIPLE_CHOICE_MULTIPLE' | 'FILL_IN_THE_BLANK';
-type Difficulty = 'EASY' | 'MEDIUM' | 'HARD';
 
 interface Option {
   text: string;
   isCorrect: boolean;
 }
+
 
 const QuestionForm: React.FC = () => {
   const [options, setOptions] = useState<Option[]>([]);

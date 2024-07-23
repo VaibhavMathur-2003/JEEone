@@ -9,7 +9,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <Suspense fallback={<div>Loading...</div>}>
         <QuestionPage params={params} />
       </Suspense>
-      <div className="w-1/2 bg-gray-100 p-6">
+      <div className="w-1/2 bg-gray-100 p-6 hidden md:flex flex-col">
         <h2 className="text-xl font-bold mb-4">Rough Work</h2>
         <DrawingCanvas />
       </div>

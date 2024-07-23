@@ -5,10 +5,10 @@ import { deleteQuestion, editQuestion, getQuestion } from "./action";
 import { redirect } from "next/navigation";
 
 interface Option {
-  id: number; // Changed from string to number
+  id: number; 
   text: string;
   isCorrect: boolean;
-  questionId: number; // Added this field
+  questionId: number;
 }
 
 interface Question {
@@ -54,7 +54,6 @@ export default function EditQuestion() {
 
     try {
       const data = await getQuestion(Number(questionId));
-      // Use type assertion to convert the data to Question type
       setQuestion(data as unknown as Question);
     } catch (err) {
       setError("Error fetching question");
@@ -96,7 +95,7 @@ export default function EditQuestion() {
     setQuestion(prev => {
       if (!prev) return null;
       const newOption: Option = {
-        id: Math.min(-1, ...prev.options.map(o => o.id)) - 1, // Generate negative IDs for new options
+        id: Math.min(-1, ...prev.options.map(o => o.id)) - 1,
         text: '',
         isCorrect: false,
         questionId: prev.id
@@ -110,7 +109,7 @@ export default function EditQuestion() {
     try {
       await editQuestion(question);
       alert("Question updated successfully");
-      redirect("/problems"); // Adjust this path as needed
+      redirect("/problems");
     } catch (err) {
       setError("Error updating question");
       console.error(err);
@@ -122,7 +121,7 @@ export default function EditQuestion() {
     try {
       await deleteQuestion(Number(questionId));
       alert("Question deleted successfully");
-      redirect("/questions"); // Adjust this path as needed
+      redirect("/questions");
     } catch (err) {
       setError("Error deleting question");
       console.error(err);

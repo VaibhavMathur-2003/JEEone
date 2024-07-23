@@ -1,7 +1,6 @@
 import { signOut } from "@/auth";
 import { db } from "@/db/db";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Suspense } from "react";
 
 export default async function Page({ params }: { params: { id: string } }) {

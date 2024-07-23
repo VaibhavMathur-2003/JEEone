@@ -28,10 +28,6 @@ const nodeTypes: NodeTypes = {
 
 import { initialPhysicsNodes, initialPhysicsEdges } from '@/data/physicsData';
 
-// Physics Nodes and Edges
-
-
-
 const fitViewOptions: FitViewOptions = {
   padding: 0.01,
 };
@@ -41,7 +37,7 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 };
 
 export default function SubjectFlow() {
-  const [subject, setSubject] = useState('Physics'); // State to switch subjects
+  const [subject, setSubject] = useState('Physics');
   const [nodes, setNodes] = useState<Node[]>(initialPhysicsNodes);
   const [edges, setEdges] = useState<Edge[]>(initialPhysicsEdges);
 

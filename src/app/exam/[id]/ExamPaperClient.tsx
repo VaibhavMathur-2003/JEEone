@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState,  useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   ExamPaper as ExamPaperType,
   ExamPaperQuestion,
@@ -104,7 +104,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
   useEffect(() => {
     if (fullScreenExitCount > 2 || tabSwitchCount > 2) {
       handleSubmit();
-      redirect('/exam')
+      redirect("/exam");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fullScreenExitCount, tabSwitchCount]);
@@ -124,7 +124,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
   const currentQuestion = examPaper.questions[currentQuestionIndex];
 
   return (
-    <div className=" bg-gradient-to-b overflow-hidden max-h-[90vh] from-gray-100 to-gray-200 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="bg-gradient-to-b overflow-hidden max-h-[90vh] from-gray-100 to-gray-200 py-8 px-4 sm:px-6 lg:px-8">
       {!isFullScreen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg text-center">
@@ -140,20 +140,22 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
           </div>
         </div>
       )}
-      <div className=" mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+      <div className="mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
         <div className="flex flex-col lg:flex-row">
           <div className="flex-1 flex flex-col justify-between p-6 lg:p-8 overflow-y-scroll h-[85vh]">
             <div>
-              <div className="flex justify-between">
-              <p className="text-xl font-bold text-red-600 mb-4">
-                Time Remaining: {formatTime(timeRemaining)}
-              </p>
-              <p className="text-lg font-semibold text-yellow-600 mb-4">
-                Full-screen exits: {fullScreenExitCount}/3
-              </p>
-              <p className="text-lg font-semibold text-yellow-600 mb-4">
-                Tab switches: {tabSwitchCount}/3
-              </p>
+              <div className="flex flex-col sm:flex-row justify-between">
+                <p className="text-xl font-bold text-red-600 mb-4">
+                  Time Remaining: {formatTime(timeRemaining)}
+                </p>
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mb-4">
+                  <p className="text-lg font-semibold text-yellow-600">
+                    Full-screen exits: {fullScreenExitCount}/3
+                  </p>
+                  <p className="text-lg font-semibold text-yellow-600">
+                    Tab switches: {tabSwitchCount}/3
+                  </p>
+                </div>
               </div>
               <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
                 {examPaper.title}
@@ -215,7 +217,7 @@ const ExamPaperClient: React.FC<Props> = ({ examPaper, userId, duration }) => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Questions
             </h3>
-            <div className="grid grid-cols-5 gap-2">
+            <div className="grid grid-cols-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
               {examPaper.questions.map((question, index) => (
                 <button
                   key={question.id}

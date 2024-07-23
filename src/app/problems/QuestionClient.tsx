@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 
 type Question = {
-  id: number; // Changed from string to number
+  id: number;
   title: string;
   difficulty: string;
   subject: string;
@@ -156,86 +156,87 @@ export default function QuestionListClient({
 
   return (
     <>
-      <div className="mb-4 flex flex-wrap gap-2">
-        <input
-          type="text"
-          placeholder="Search questions..."
-          className="px-4 py-2 border rounded-md"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          className="px-4 py-2 border rounded-md"
-          value={searchParams.get("difficulty") || ""}
-          onChange={(e) => updateSearchParams("difficulty", e.target.value)}
+    <div className="mb-4 flex flex-col sm:flex-row flex-wrap gap-2">
+      <input
+        type="text"
+        placeholder="Search questions..."
+        className="px-4 py-2 border rounded-md w-full sm:w-auto"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      <select
+        className="px-4 py-2 border rounded-md w-full sm:w-auto"
+        value={searchParams.get("difficulty") || ""}
+        onChange={(e) => updateSearchParams("difficulty", e.target.value)}
+      >
+        <option value="">All Difficulties</option>
+        <option value="EASY">Easy</option>
+        <option value="MEDIUM">Medium</option>
+        <option value="HARD">Hard</option>
+      </select>
+      <select
+        className="px-4 py-2 border rounded-md w-full sm:w-auto"
+        value={searchParams.get("subject") || ""}
+        onChange={(e) => updateSearchParams("subject", e.target.value)}
+      >
+        <option value="">All Subjects</option>
+        <option value="Physics">Physics</option>
+        <option value="Maths">Maths</option>
+        <option value="Chemistry">Chemistry</option>
+      </select>
+    </div>
+  
+    <ul className="divide-y divide-gray-200 bg-white shadow rounded-lg">
+      {questions.map((question) => (
+        <li
+          key={question.id}
+          className="py-4 px-6 hover:bg-gray-50 transition duration-300"
         >
-          <option value="">All Difficulties</option>
-          <option value="EASY">Easy</option>
-          <option value="MEDIUM">Medium</option>
-          <option value="HARD">Hard</option>
-        </select>
-        <select
-          className="px-4 py-2 border rounded-md"
-          value={searchParams.get("subject") || ""}
-          onChange={(e) => updateSearchParams("subject", e.target.value)}
-        >
-          <option value="">All Subjects</option>
-          <option value="Physics">Physics</option>
-          <option value="Maths">Maths</option>
-          <option value="Chemistry">Chemistry</option>
-        </select>
-      </div>
-
-      <ul className="divide-y divide-gray-200 bg-white shadow rounded-lg">
-        {questions.map((question) => (
-          <li
-            key={question.id}
-            className="py-4 px-6 hover:bg-gray-50 transition duration-300"
-          >
-            <Link href={`/problems/${question.id}`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  {getStatusIcon(question.questionStatus[0]?.status)}
-                  <div className="text-gray-800 font-medium">
-                    {question.title}
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <div
-                    className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
-                      question.difficulty === "EASY"
-                        ? "bg-green-100 text-green-800"
-                        : question.difficulty === "MEDIUM"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : question.difficulty === "HARD"
-                        ? "bg-red-100 text-red-800"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {question.difficulty.toLowerCase()}
-                  </div>
-                  <div className="text-gray-600">{question.subject}</div>
-                  {getTypeIcon(question.type)}
+          <Link href={`/problems/${question.id}`}>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+              <div className="flex items-center space-x-4">
+                {getStatusIcon(question.questionStatus[0]?.status)}
+                <div className="text-gray-800 font-medium">
+                  {question.title}
                 </div>
               </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-4 flex justify-center">
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            className={`mx-1 px-3 py-1 rounded ${
-              page === currentPage ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => updateSearchParams("page", page.toString())}
-          >
-            {page}
-          </button>
-        ))}
-      </div>
-    </>
+              <div className="flex items-center space-x-4 mt-2 sm:mt-0">
+                <div
+                  className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                    question.difficulty === "EASY"
+                      ? "bg-green-100 text-green-800"
+                      : question.difficulty === "MEDIUM"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : question.difficulty === "HARD"
+                      ? "bg-red-100 text-red-800"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  {question.difficulty.toLowerCase()}
+                </div>
+                <div className="text-gray-600">{question.subject}</div>
+                {getTypeIcon(question.type)}
+              </div>
+            </div>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  
+    <div className="mt-4 flex justify-center flex-wrap">
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          className={`mx-1 my-1 px-3 py-1 rounded ${
+            page === currentPage ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+          onClick={() => updateSearchParams("page", page.toString())}
+        >
+          {page}
+        </button>
+      ))}
+    </div>
+  </>
+  
   );
 }
