@@ -11,7 +11,7 @@ type Question = {
   difficulty: string;
   subject: string;
   type: string;
-  questionStatus: { status: string }[];
+  questionStatus: { status: string, userId:string|undefined }[];
 };
 
 type Props = {
@@ -199,7 +199,7 @@ export default function QuestionListClient({
           <Link href={`/problems/${question.id}`}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
               <div className="flex items-center space-x-4">
-                {id===question.questionStatus[0]?.userId && getStatusIcon(question.questionStatus[0]?.status)}
+                {id===question.questionStatus[0].userId && getStatusIcon(question.questionStatus[0]?.status)}
                 <div className="text-gray-800 font-medium">
                   {question.title}
                 </div>
