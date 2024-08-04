@@ -18,12 +18,14 @@ type Props = {
   questions: Question[];
   totalPages: number;
   currentPage: number;
+  id: string|undefined;
 };
 
 export default function QuestionListClient({
   questions,
   totalPages,
   currentPage,
+  id,
 }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -82,57 +84,57 @@ export default function QuestionListClient({
     }
   }
 
-  function getTypeIcon(type: string) {
-    switch (type) {
-      case "MULTIPLE_CHOICE_SINGLE":
-        return (
-          <svg
-            className="w-5 h-5 text-blue-500"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <circle cx="12" cy="12" r="3" />
-          </svg>
-        );
-      case "MULTIPLE_CHOICE_MULTIPLE":
-        return (
-          <svg
-            className="w-5 h-5 text-purple-500"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 6v6M12 18h.01" />
-          </svg>
-        );
-      case "FILL_IN_THE_BLANK":
-        return (
-          <svg
-            className="w-5 h-5 text-teal-500"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M4.93 4.93l14.14 14.14" />
-          </svg>
-        );
-      default:
-        return null;
-    }
-  }
+  // function getTypeIcon(type: string) {
+  //   switch (type) {
+  //     case "MULTIPLE_CHOICE_SINGLE":
+  //       return (
+  //         <svg
+  //           className="w-5 h-5 text-blue-500"
+  //           viewBox="0 0 24 24"
+  //           fill="none"
+  //           stroke="currentColor"
+  //           strokeWidth="2"
+  //           strokeLinecap="round"
+  //           strokeLinejoin="round"
+  //         >
+  //           <circle cx="12" cy="12" r="10" />
+  //           <circle cx="12" cy="12" r="3" />
+  //         </svg>
+  //       );
+  //     case "MULTIPLE_CHOICE_MULTIPLE":
+  //       return (
+  //         <svg
+  //           className="w-5 h-5 text-purple-500"
+  //           viewBox="0 0 24 24"
+  //           fill="none"
+  //           stroke="currentColor"
+  //           strokeWidth="2"
+  //           strokeLinecap="round"
+  //           strokeLinejoin="round"
+  //         >
+  //           <circle cx="12" cy="12" r="10" />
+  //           <path d="M12 6v6M12 18h.01" />
+  //         </svg>
+  //       );
+  //     case "FILL_IN_THE_BLANK":
+  //       return (
+  //         <svg
+  //           className="w-5 h-5 text-teal-500"
+  //           viewBox="0 0 24 24"
+  //           fill="none"
+  //           stroke="currentColor"
+  //           strokeWidth="2"
+  //           strokeLinecap="round"
+  //           strokeLinejoin="round"
+  //         >
+  //           <circle cx="12" cy="12" r="10" />
+  //           <path d="M4.93 4.93l14.14 14.14" />
+  //         </svg>
+  //       );
+  //     default:
+  //       return null;
+  //   }
+  // }
 
   useEffect(() => {
     if (debouncedSearch !== searchParams.get("search")) {
@@ -187,7 +189,9 @@ export default function QuestionListClient({
     </div>
   
     <ul className="divide-y divide-gray-200 bg-white shadow rounded-lg">
+      
       {questions.map((question) => (
+        
         <li
           key={question.id}
           className="py-4 px-6 hover:bg-gray-50 transition duration-300"
@@ -195,27 +199,26 @@ export default function QuestionListClient({
           <Link href={`/problems/${question.id}`}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between">
               <div className="flex items-center space-x-4">
-                {getStatusIcon(question.questionStatus[0]?.status)}
+                {id===question.questionStatus[0]?.userId && getStatusIcon(question.questionStatus[0]?.status)}
                 <div className="text-gray-800 font-medium">
                   {question.title}
                 </div>
               </div>
               <div className="flex items-center space-x-4 mt-2 sm:mt-0">
                 <div
-                  className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                  className={`inline-flex items-center px-2 py-1 text-sm font-medium rounded-full ${
                     question.difficulty === "EASY"
-                      ? "bg-green-100 text-green-800"
+                      ? "text-green-500"
                       : question.difficulty === "MEDIUM"
-                      ? "bg-yellow-100 text-yellow-800"
+                      ? "text-yellow-500"
                       : question.difficulty === "HARD"
-                      ? "bg-red-100 text-red-800"
-                      : "bg-gray-100 text-gray-800"
+                      ? "text-red-500"
+                      : "text-gray-800"
                   }`}
                 >
                   {question.difficulty.toLowerCase()}
                 </div>
                 <div className="text-gray-600">{question.subject}</div>
-                {getTypeIcon(question.type)}
               </div>
             </div>
           </Link>

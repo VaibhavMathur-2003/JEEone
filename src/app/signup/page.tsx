@@ -1,5 +1,6 @@
 import { db } from "@/db/db";
 import React from "react";
+import { redirect } from 'next/navigation'
 
 import {
   Card,
@@ -46,9 +47,11 @@ async function handleSubmit(formData: FormData) {
       password: hashedPassword,
     },
   });
+  redirect('/signin')
+
 }
 
-export default function Component() {
+export default async function Component() {
   return (
     <div className="h-[100vh] flex items-center justify-center bg-blue-100 overflow-y-hidden">
       <Card className="mx-auto max-w-sm">

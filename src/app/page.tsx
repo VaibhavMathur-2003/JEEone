@@ -37,7 +37,7 @@ export default function Component() {
                 </div>
               </div>
               <Image
-                src="https://images.unsplash.com/photo-1504275107627-0c2ba7a43dba?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="https://images.pexels.com/photos/277770/pexels-photo-277770.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 width="550"
                 height="550"
                 alt="Hero"
@@ -112,7 +112,7 @@ export default function Component() {
                 </ul>
               </div>
               <Image
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8U3R1ZGVudHxlbnwwfHwwfHx8MA%3D%3D"
+                src="https://images.pexels.com/photos/1925536/pexels-photo-1925536.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 width="550"
                 height="310"
                 alt="Image"
@@ -140,7 +140,7 @@ export default function Component() {
             </div>
             <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
               <Image
-                src="https://png.pngtree.com/thumb_back/fh260/background/20230610/pngtree-this-image-displays-an-empty-room-full-of-people-trying-to-image_2950957.jpg"
+                src="https://images.pexels.com/photos/159740/library-la-trobe-study-students-159740.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
                 width="550"
                 height="310"
                 alt="Image"

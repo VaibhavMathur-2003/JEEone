@@ -31,12 +31,12 @@ export default async function QuestionPage({
             <span
               className={`px-2 py-1 rounded-full ${
                 question.difficulty === 'EASY'
-                  ? 'bg-green-500'
+                  ? 'text-green-500'
                   : question.difficulty === 'MEDIUM'
-                  ? 'bg-yellow-500'
+                  ? 'text-yellow-500'
                   : question.difficulty === 'HARD'
-                  ? 'bg-red-500'
-                  : 'bg-gray-500'
+                  ? 'text-red-500'
+                  : 'text-gray-500'
               }`}
             >
               {question.difficulty}
