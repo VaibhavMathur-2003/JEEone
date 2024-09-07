@@ -78,7 +78,7 @@ export default async function Component() {
               <div className="my-4">
                 <Input type="password" placeholder="Password" name="password" />
               </div>
-              <Button type="submit">Sign up</Button>
+              <Button className="w-full" type="submit">Sign up</Button>
             </form>
           </div>
         </CardContent>

@@ -13,9 +13,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+
+
 const SignInForm = () => {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
+  const guestmail = "guest@example.com";
+  const guestpass = "guestpassword987";
+
+  const handleGuestLogin = async () => {
+   
+    const signInError = await loginHandler(guestmail, guestpass);
+    if (signInError) {
+      setError(signInError);
+    } else {
+      router.refresh();
+    }
+  };
+
 
   return (
     <div className="flex items-center overflow-y-hidden h-screen bg-blue-100">
@@ -49,9 +65,11 @@ const SignInForm = () => {
     >
       <Input className="my-4" type="email" placeholder="Email" name="email" />
       <Input className="my-4" type="password" placeholder="Password" name="password" />
-      <Button className="my-4" type="submit">Sign In</Button>
+      <Button className="my-4 w-full" type="submit">Sign In</Button>
       {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
+    <Button className="bg-gray-700 w-full" onClick={handleGuestLogin} type="button">Enter as Guest</Button>
+
     </CardContent>
     </Card>
     </div>

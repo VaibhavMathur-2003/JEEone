@@ -6,7 +6,9 @@ import React from "react";
 
 const page = async () => {
   const session = await auth();
-  if (session?.user) redirect("/");
+  const user = session?.user;
+  if(user) redirect("/problems")
+ 
   return (
     <div>
       <SignInForm />

@@ -13,7 +13,7 @@ export default async function QuestionListPage({
   const userId = session?.user?.id;
 
   const page = Number(searchParams.page) || 1;
-  const pageSize = 10;
+  const pageSize = 7;
   const search = (searchParams.search as string | undefined)?.toLowerCase();
   const difficulty = searchParams.difficulty as string | undefined;
   const subject = searchParams.subject as string | undefined;
@@ -53,29 +53,11 @@ export default async function QuestionListPage({
   });
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
-      <div className="w-2/3 mb-3 mx-auto text-center">
-        <b>Note:</b> This is a sample side project. The problems may contain
-        incorrect answers and scores. I would greatly appreciate your feedback
-        on my{" "}
-        <a
-          className="cursor-pointer text-blue-500"
-          href="https://www.linkedin.com/in/vaibhav-mathur-a63940231/"
-        >
-          LinkedIn
-        </a>{" "}
-        or{" "}
-        <a
-          className="cursor-pointer text-blue-500"
-          href="https://x.com/VibeBhav_10"
-        >
-          Twitter (X)
-        </a>
-        .
-      </div>
+    <div className="max-w-6xl min-h-screen  rounded-t-[50px] mt-5 mx-auto py-8 px-4">
+     
 
       <h1 className="text-2xl font-semibold mb-6 text-center">Question List</h1>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<LoadingSkeleton />}>
         <QuestionListClient
           questions={questions}
           totalPages={totalPages}
@@ -86,3 +68,19 @@ export default async function QuestionListPage({
     </div>
   );
 }
+
+const LoadingSkeleton = (): JSX.Element => (
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {[...Array(4)].map((_, index) => (
+      <div key={index} className="bg-white p-6 rounded-lg shadow-md animate-pulse">
+        <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+        <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+        <div className="flex justify-between">
+          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+          <div className="h-4 bg-gray-200 rounded w-1/4"></div>
+        </div>
+      </div>
+    ))}
+  </div>
+);
