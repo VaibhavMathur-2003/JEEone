@@ -1,4 +1,4 @@
-# ![JEEone](https://github.com/VaibhavMathur-2003/JEEone/blob/main/public/assets/Landing.webp)
+# ![JEEone](https://github.com/VaibhavMathur-2003/JEEone/blob/main/public/assets/Landing1.webp)
 ![](https://github.com/VaibhavMathur-2003/JEEone/blob/main/public/assets/Landing2.webp)
 # JEEone
 <table>
