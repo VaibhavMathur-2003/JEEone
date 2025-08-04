@@ -6,7 +6,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className='flex'>
       
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<div className='w-1/2'>Loading...</div>}>
         <QuestionPage params={params} />
       </Suspense>
       <div className="w-1/2 bg-gray-100 p-6 hidden md:flex flex-col">

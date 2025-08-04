@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { createQuestion } from '@/action/question';
+import { Button } from '@/components/ui/button';
 
 type QuestionType = 'MULTIPLE_CHOICE_SINGLE' | 'MULTIPLE_CHOICE_MULTIPLE' | 'FILL_IN_THE_BLANK';
 
@@ -15,6 +16,9 @@ const QuestionForm: React.FC = () => {
   const [options, setOptions] = useState<Option[]>([]);
   const [newOption, setNewOption] = useState<Option>({ text: '', isCorrect: false });
   const [questionType, setQuestionType] = useState<QuestionType>('MULTIPLE_CHOICE_SINGLE');
+  const [isBulk, setIsBulk] = useState(false);
+  const [bulkJson, setBulkJson] = useState('');
+
 
   useEffect(() => {
     if (questionType === 'FILL_IN_THE_BLANK') {
@@ -42,7 +46,64 @@ const QuestionForm: React.FC = () => {
   
 
   return (
-    <form action={createQuestion} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
+    <>
+    <div className="flex justify-center my-4">
+  <Button
+    type="button"
+    onClick={() => setIsBulk(!isBulk)}
+    className="text-white"
+  >
+    {isBulk ? 'Switch to Single Question Form' : 'Switch to Bulk Upload'}
+  </Button>
+</div>
+
+    {isBulk ? (
+  <form
+    onSubmit={async (e) => {
+      e.preventDefault();
+      try {
+        const parsed = JSON.parse(bulkJson);
+        if (!Array.isArray(parsed)) throw new Error("JSON must be an array");
+
+        for (const question of parsed) {
+          const formData = new FormData();
+          formData.append('title', question.title);
+          formData.append('text', question.text);
+          formData.append('difficulty', question.difficulty);
+          formData.append('subject', question.subject);
+          formData.append('explanation', question.explanation);
+          formData.append('type', question.type);
+          formData.append('options', JSON.stringify(question.options || []));
+          await createQuestion(formData); // reuse existing logic
+        }
+
+        alert("All questions uploaded successfully!");
+        setBulkJson('');
+      } catch (err) {
+        console.error(err);
+        alert("Invalid JSON or error uploading questions.");
+      }
+    }}
+    className="max-w-2xl mx-auto p-6 bg-white shadow-md rounded-lg"
+  >
+    <textarea
+      rows={15}
+      className="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Paste an array of questions here"
+      value={bulkJson}
+      onChange={(e) => setBulkJson(e.target.value)}
+      required
+    ></textarea>
+
+    <button
+      type="submit"
+      className="w-full py-2 mt-4 bg-green-500 text-white rounded-lg hover:bg-green-600 focus:outline-none focus:bg-green-600"
+    >
+      Upload Questions
+    </button>
+  </form>
+) : (
+  <form action={createQuestion} className="max-w-md mx-auto p-6 bg-white shadow-md rounded-lg">
     <input
       type="text"
       name="title"
@@ -139,6 +200,10 @@ const QuestionForm: React.FC = () => {
       Submit Question
     </button>
   </form>
+)}
+
+    
+  </>
   
   );
 };

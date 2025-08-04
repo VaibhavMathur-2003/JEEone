@@ -106,7 +106,7 @@ export default function QuestionListClient({
 
   return (
     <>
-      <div className="mb-6 flex max-w-3xl mx-auto flex-col sm:flex-row items-center gap-4 bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-lg shadow-md">
+      <div className="mb-6 flex max-w-4xl mx-auto flex-col sm:flex-row items-center gap-4 bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-lg shadow-md">
         <input
           type="text"
           placeholder="Search questions..."
@@ -143,7 +143,7 @@ export default function QuestionListClient({
           </div>
         </div>
       ) : (
-        <ul className="max-w-3xl mx-auto  shadow-lg rounded-lg">
+        <ul className="max-w-4xl mx-auto rounded-lg">
           {questions.map((question) => (
             <li
               key={question.id}

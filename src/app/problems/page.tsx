@@ -13,7 +13,7 @@ export default async function QuestionListPage({
   const userId = session?.user?.id;
 
   const page = Number(searchParams.page) || 1;
-  const pageSize = 7;
+  const pageSize = 15;
   const search = (searchParams.search as string | undefined)?.toLowerCase();
   const difficulty = searchParams.difficulty as string | undefined;
   const subject = searchParams.subject as string | undefined;
@@ -53,19 +53,25 @@ export default async function QuestionListPage({
   });
 
   return (
-    <div className="max-w-6xl min-h-screen  rounded-t-[50px] mt-5 mx-auto py-8 px-4">
-     
+    <div className="max-w-6xl min-h-screen mx-auto mt-10 px-6 py-10 bg-white/90 backdrop-blur-md shadow-xl rounded-3xl border border-gray-200">
+  <h1 className="text-4xl font-bold text-center text-gray-800 mb-10">
+    📚 Question List
+  </h1>
 
-      <h1 className="text-2xl font-semibold mb-6 text-center">Question List</h1>
-      <Suspense fallback={<LoadingSkeleton />}>
-        <QuestionListClient
-          questions={questions}
-          totalPages={totalPages}
-          currentPage={page}
-          id={userId}
-        />
-      </Suspense>
-    </div>
+  <div className="flex justify-center mb-8">
+    <div className="w-24 h-1 rounded-full bg-blue-500" />
+  </div>
+
+  <Suspense fallback={<LoadingSkeleton />}>
+    <QuestionListClient
+      questions={questions}
+      totalPages={totalPages}
+      currentPage={page}
+      id={userId}
+    />
+  </Suspense>
+</div>
+
   );
 }
 
